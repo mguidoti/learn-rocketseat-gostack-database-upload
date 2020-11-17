@@ -5,11 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
- } from 'typeorm';
+  JoinColumn,
+} from 'typeorm';
 
- import Category from './Category';
- @Entity('transactions')
+import Category from './Category';
+
+@Entity('transactions')
 class Transaction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
