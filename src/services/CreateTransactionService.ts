@@ -1,5 +1,5 @@
 import { getRepository, getCustomRepository } from 'typeorm';
-// import AppError from '../errors/AppError';
+import AppError from '../errors/AppError';
 
 import Transaction from '../models/Transaction';
 import Category from '../models/Category';
@@ -22,6 +22,16 @@ class CreateTransactionService {
     // Define repositories
     const transactionsRepository = getCustomRepository(TransactionRepository);
     const categoriesRepository = getRepository(Category);
+
+    if (!(type === 'income' || type === 'outcome')) {
+      throw new AppError('The type provided is wrong.', 400);
+    }
+
+    const { total } = await transactionsRepository.getBalance();
+
+    if (type === 'outcome' && value > total) {
+      throw new AppError('The cost is higher than the balance.', 400);
+    }
 
     // Check if the category name has an ID
     let category = await categoriesRepository.findOne({
