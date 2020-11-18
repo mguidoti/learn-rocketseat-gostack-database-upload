@@ -1,4 +1,4 @@
-import { isUuid } from 'uuidv4';
+import { validate } from 'uuid';
 import { getRepository } from 'typeorm';
 import AppError from '../errors/AppError';
 import Transaction from '../models/Transaction';
@@ -8,7 +8,7 @@ class DeleteTransactionService {
     // to do
     const transactionsRepository = getRepository(Transaction);
 
-    if (!isUuid(id)) {
+    if (!validate(id)) {
       throw new AppError('Provided id is not a valid uuid', 400);
     }
 
