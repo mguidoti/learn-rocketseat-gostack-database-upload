@@ -41,10 +41,7 @@ transactionsRouter.post('/', async (request, response) => {
 
   return response.json({
     id: transaction.id,
-    title,
-    value,
-    type,
-    category,
+    transaction,
   });
 });
 

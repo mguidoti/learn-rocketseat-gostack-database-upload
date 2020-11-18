@@ -8,8 +8,7 @@ interface CSVTransaction {
   title: string;
   type: 'income' | 'outcome';
   value: number;
-  categoryName: string;
-  category_id: string;
+  category: string;
 }
 class ImportTransactionsService {
   async execute(filePath: string): Promise<Transaction[]> {
@@ -28,20 +27,19 @@ class ImportTransactionsService {
     const categories: string[] = [];
 
     parseCSV.on('data', async line => {
-      const [title, type, value, categoryName] = line.map((cell: string) =>
+      const [title, type, value, category] = line.map((cell: string) =>
         cell.trim(),
       );
 
       if (!title || !type || !value) return;
 
-      categories.push(categoryName);
+      categories.push(category);
 
       transactions.push({
         title,
         type,
         value,
-        categoryName,
-        category_id: '',
+        category,
       });
     });
 
@@ -71,23 +69,14 @@ class ImportTransactionsService {
 
     const finalCategories = [...newCategories, ...existentCategories];
 
-    // Add category_id to all transaction objects
-    transactions.map((transaction: CSVTransaction) => {
-      const cat = finalCategories.find(
-        category => category.title === transaction.categoryName,
-      );
-
-      if (cat) {
-        transaction.category_id = cat.id;
-      }
-    });
-
     const createdTransactions = transactionsRepository.create(
       transactions.map(transaction => ({
         title: transaction.title,
         type: transaction.type,
         value: transaction.value,
-        category_id: transaction.category_id,
+        category: finalCategories.find(
+          category => category.title === transaction.category,
+        ),
       })),
     );
 

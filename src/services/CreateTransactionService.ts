@@ -46,13 +46,11 @@ class CreateTransactionService {
       await categoriesRepository.save(category);
     }
 
-    const category_id = category.id;
-
     const transaction = transactionsRepository.create({
       title,
       value,
       type,
-      category_id,
+      category,
     });
 
     await transactionsRepository.save(transaction);
