@@ -1,13 +1,8 @@
 import { getRepository, In } from 'typeorm';
 import csvParse from 'csv-parse';
 import fs from 'fs';
-import { check } from 'prettier';
 import Transaction from '../models/Transaction';
 import Category from '../models/Category';
-import checkCategory from '../middleware/checkCategory';
-import loadCSV from '../middleware/loadDataFromCSV';
-import transactionsRouter from '../routes/transactions.routes';
-import TransactionsRepository from '../repositories/TransactionsRepository';
 
 interface CSVTransaction {
   title: string;
